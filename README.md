@@ -28,16 +28,32 @@ Define the Bitbucket Pipeline configuration in your repository.
 ```yaml
 image: hashicorp/terraform:latest
 
+image: hashicorp/terraform
+
 pipelines:
   branches:
     master:
-      - step:
-          name: Deploy to AWS
-          deployment: production
+     - step:
+          name: Deploy to Production
+          deployment: Production
           script:
+            - terraform fmt
             - terraform init
+            - terraform validate
+            - terraform plan
             - terraform plan -out=tfplan
+            - terraform refresh
             - terraform apply -auto-approve
+     - step:
+          name: Checkov
+          image:
+            name: bridgecrew/checkov:latest
+            entrypoint:
+              - '/usr/bin/env'
+              - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+          script:
+            - checkov -d .
+
 ```
 
 This configuration runs on the `master` branch, initializes Terraform, creates an execution plan, and applies changes automatically.
