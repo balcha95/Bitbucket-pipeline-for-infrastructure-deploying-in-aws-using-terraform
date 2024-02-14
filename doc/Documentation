@@ -1,0 +1,54 @@
+Bitbucket pipeline for infrastructure deploying in aws using terraform.
+
+Introduction:
+Bitbucket Pipelines is a continuous integration and continuous deployment (CI/CD) service built into Bitbucket Cloud. It allows you to automatically build, test, and deploy your code in a streamlined manner. This documentation will guide you through setting up a Bitbucket Pipeline for deploying infrastructure in AWS using Terraform.
+
+Prerequisites:
+- An AWS account with appropriate permissions to create and manage resources.
+- Terraform installed and configured locally.
+- A Bitbucket repository containing your Terraform configuration files.
+
+
+Setting up Bitbucket Pipeline:
+1. In your Bitbucket repository, 
+
+Step 1: Configure AWS Credentials:
+Before you can deploy infrastructure to AWS using Bitbucket Pipelines, you need to configure AWS credentials securely.
+go to Settings > Repository settings > Repository variables.
+
+2. Add the following repository variables:
+   - `AWS_ACCESS_KEY_ID`: Your AWS access key ID.
+   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key.
+   - Optionally, you can also add `AWS_DEFAULT_REGION` to specify the default AWS region.
+
+Step 2: Define Bitbucket Pipeline:
+Now, you'll define the Bitbucket Pipeline configuration in your repository.
+
+1. Create a `bitbucket-pipelines.yml` file in the root of your repository if it doesn't already exist.
+2. Open the `bitbucket-pipelines.yml` file and define the pipeline steps. Below is an example configuration:
+
+bitbucket-pipelines.yml
+
+This configuration defines a pipeline that will run on the `master` branch. It initializes Terraform, creates an execution plan, and applies the changes automatically.
+
+Step 3: Triggering the Pipeline:
+Once you've configured the pipeline, it will automatically trigger whenever changes are pushed to the `master` branch.
+Step 4: Monitoring Deployment:
+Monitor the pipeline execution in Bitbucket Pipelines interface. You'll see logs and output of each step, allowing you to troubleshoot any issues that arise.
+
+Running Checkov:
+
+Before provisioning lets run Checkov against template, navigate to the directory containing the file and execute the checkov command:
+
+The deployment has been successful.
+
+The Checkov output gives you a detailed overview of the scan results, showing what passed and what didn't, along with extra information and links for more help.
+
+Conclusion:
+Bitbucket Pipelines simplifies the process of deploying infrastructure to AWS using Terraform. By following this documentation, you can automate the deployment process and ensure consistent infrastructure deployments .
+
+References:
+Bitbucket Pipelines Documentation : https://support.atlassian.com/bitbucket-cloud/docs/bitbucket-pipelines-configuration-reference/
+Terraform Documentation: https://developer.hashicorp.com/terraform/docs
+
+             
