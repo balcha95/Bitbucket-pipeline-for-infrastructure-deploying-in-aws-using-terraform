@@ -1,0 +1,44 @@
+# Bitbucket Pipeline YAML for deploying infrastructure in AWS using Terraform
+
+# Define the Docker image to be used for the pipeline
+image: hashicorp/terraform
+
+pipelines:
+  branches:
+    master:
+    # Define pipeline steps for the master branch
+      - step:
+          name: Terraform Init
+          script:
+            # Initialize Terraform
+            - terraform fmt
+            - terraform init
+            - terraform validate  
+            
+      - step:
+          name: Terraform Plan
+          script:
+            # Run Terraform plan to see what changes will be made
+             - terraform plan
+      - step:
+          name: Terraform Refresh
+          script:
+            # Refresh Terraform state to sync with real-world infrastructure
+            - terraform refresh
+      - step:
+          name: Terraform Apply
+          script:
+            # Apply Terraform changes automatically without manual approval
+            - terraform apply -auto-approve
+
+# Define additional pipeline steps for other branches or scenarios
+   
+      - step:
+          name: Checkov
+          image:
+           name: bridgecrew/checkov:latest
+           entrypoint:
+            - '/usr/bin/env'
+            - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+          script:
+            - checkov -d .
